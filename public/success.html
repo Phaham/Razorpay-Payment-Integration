@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BoogieBites/PaymentSuccess</title>
+</head>
+
+<body>
+  <style>
+    html,
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #3C385C;
+      background: -webkit-linear-gradient(to right, #3C385C, #6c6896);
+      background: linear-gradient(to right, #3C385C, #6c6896);
+      width: 100%;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    .success-page {
+      max-width: 550px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      text-align: center;
+      transform: perspective(1px) translateY(50%)
+    }
+    .btn-view-orders {
+      display: block;
+      border: 1px solid #47c7c5;
+      width: 150px;
+      margin: 0 auto;
+      margin-top: 25px;
+      padding: 10px;
+      color: #fff;
+      border-radius: 5px;
+      background-color: #47c7c5;
+      text-decoration: none;
+    }
+    .btn-view-orders:hover{
+      transform: scale(1.02);
+      background-color: #3C385C;
+    }
+    h1 {
+      color: #47c7c5;
+      margin-top: 25px;
+      letter-spacing: .5px;
+      font-size: 40px;
+      margin-bottom: 2px;
+    }
+    p{
+      font-size: 20px;
+      color: rgba(170, 170, 170, 0.685);
+    }
+    a {
+      text-decoration: none;
+    }
+  </style>
+  <div class="success-page">
+    <h1>Payment Successful </h1>
+    <p>We are delighted to inform you that we received your payment</p>
+    <a href="https://boogiepayments.netlify.app" class="btn-view-orders">Visit Payments</a>
+  </div>
+  <!-- <div class="failure-page">
+    <img src="https://www.downloadclipart.net/svg/52728-wrong-cross-vector.svg" class="center" alt="" />
+    <h2>Payment Failed </h2>
+    <p>Oh no! Payment Failed ! Please Try Again</p>
+    <a href="#" class="btn-view-orders">Visit Payments</a>
+  </div> -->
+</body>
+
+</html>

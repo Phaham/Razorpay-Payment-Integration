@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Page</title>
+  <link rel="stylesheet" type="css/text" href="styles.css">
+
+</head>
+
+<body>
+
+  <style>
+    html,
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #3C385C;
+      background: -webkit-linear-gradient(to right, #3C385C, #6c6896);
+      background: linear-gradient(to right, #3C385C, #6c6896);
+      width: 100%;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    .food-img {
+      size: 200px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .user-box {
+      position: relative;
+    }
+
+    .amount ::placeholder {
+      font-size: 14px;
+    }
+
+    .user-box label {
+      position: absolute;
+      top: 5px;
+      left: 30px;
+      padding: 10px 0;
+      font-size: 14px;
+      color: #777;
+      pointer-events: none;
+      transition: .5s;
+    }
+
+    .user-box input:focus~label,
+    .user-box input:valid~label {
+      top: -10px;
+      left: 0;
+      color: #2E3192;
+      font-size: 12px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      animation: fadeIn ease 1s;
+      margin-left: 500px;
+      margin-top: 90px;
+      border-radius: 10px;
+      width: 300px;
+      height: 400px;
+      box-shadow: 0 5px 10px 0px #3C385C;
+      border: 1px solid #aaa;
+      /* transition: all .3s ease; */
+    }
+
+    .rotated {
+      transform: rotateY(-180deg);
+    }
+
+    .input-field {
+      /* caret-color: #fff; */
+      color: rgb(255, 255, 255, .7);
+      width: 80%;
+      margin-left: 12px;
+      padding: 10px 0px;
+      margin: 7px 0;
+      border: 0 1px solid #999 0 0;
+      outline: none;
+      background: transparent;
+      border-top-style: hidden;
+      border-right-style: hidden;
+      border-left-style: hidden;
+      /* border-image: linear-gradient(to right, #aaa,#bbb); */
+      border-image: linear-gradient(to right, #ff105f, #ffad06);
+      border-image-slice: 1;
+    }
+
+    .input-field:active,
+    .input-field:focus {
+      transition: all .3s ease-in-out;
+      border-bottom: 2px solid;
+      border-image: linear-gradient(to right, #ffad06, #ff105f);
+      border-bottom-style: groove;
+      border-image-slice: 1;
+    }
+
+    .checkout-field {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* flex-direction: column; */
+      /* justify-content: flex-end;
+      align-items: flex-end; */
+    }
+
+    .checkout-order-id {
+      word-break: keep-all;
+    }
+
+    .checkout-label {
+      padding-right: 8px;
+    }
+
+    .field-left {
+      margin-left: 20px;
+      padding: 10px 10px;
+      margin: 7px 0;
+      color: #aaa;
+      outline: none;
+      border: none;
+      background: transparent;
+      border-style: hidden;
+
+      /* padding-left: 10px;
+      margin: 7px 0;
+      width: 70%;
+      border: none;
+      */
+    }
+
+    .order {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .btn {
+      width: 85%;
+      padding: 10px 30px;
+      cursor: pointer;
+      display: block;
+      margin: auto;
+      background: linear-gradient(to right, #2E3192, #1BFFFF);
+      border: 0;
+      outline: none;
+      border-radius: 30px;
+    }
+
+    /* #-----------------------rzp-button1 {
+      background: linear-gradient(to right, #ff105f, #ffad06);
+    } */
+
+    .btn:hover {
+      transform: translateX(1px);
+      transform: scale(1.02);
+      /* background: linear-gradient(10deg,#1BFFFF 0%, #2E3192 100%); */
+      background: linear-gradient(to left, #2E3192, #1BFFFF);
+    }
+
+    @keyframes fadeOut {
+
+      0% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeIn {
+
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .hidden {
+      opacity: 0;
+      animation: fadeOut ease 1s;
+      /* transition: all .3s; */
+      display: none;
+      visibility: hidden;
+    }
+  </style>
+
+  <div class="container order-container">
+    <img class="food-img" src="e2.jpg" alt="food pic">
+    <div class="order user-box">
+      <!-- <label class="amount" for="">Amount</label> -->
+      <input class="input-field" type="text" id="order-amt" placeholder="Amount">
+    </div>
+    <button class="btn" id="order-button1">Order</button>
+  </div>
+  <!-- Get order id from razor pay -->
+
+  <script>
+    document.getElementById('order-button1').onclick = function (e) {
+      var url = '/api/payment/order';
+      var params = {
+        amount: Number(document.getElementById('order-amt').value) * 100,
+        currency: 'INR',
+        receipt: 'phaham_khan',
+        payment_capture: '1' //it canbe either 0 or 1 => 1 for automatic capture and 0 for manual
+      };
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function (res) {
+        if (xmlHttp.readyState === 4) {
+          res = JSON.parse(xmlHttp.responseText);
+          document.getElementById('rzp-text').value = res.sub.id;
+          document.getElementById('amount').value = `₹ ${document.getElementById('order-amt').value}`;
+        }
+      }
+      xmlHttp.open('POST', url, true);
+      xmlHttp.setRequestHeader('Content-type', 'application/json');
+      xmlHttp.send(JSON.stringify(params));
+    }
+  </script>
+  <div class="container checkout-container hidden">
+    <img class="food-img" src="e2.jpg" alt="food pic">
+    <div class="order">
+      <div class="checkout-field">
+        <label class="checkout-label checkout-amount" for="">Amount</label>
+        <input class="field-left" type="text" name="" id="amount" readonly>
+      </div>
+      <div class="checkout-field">
+        <label class="checkout-label checkout-order-id" for="">Order Id</label>
+        <input class="field-left" type="text" name="" id="rzp-text" readonly>
+      </div>
+    </div>
+    <button class="btn" id="rzp-button1">Checkout</button>
+  </div>
+
+  <div id="paymentDetails"></div>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    let order_id;
+    let payment_id;
+    let signature;
+
+    let callback_url= "https://paymentsuccess.netlify.app/";
+    if(!callback_url){
+      callback_url = "http://localhost:3000/api/payment/verify";
+    }
+    document.getElementById('rzp-button1').onclick = function (e) {
+      var options = {
+        "key": "<%= key %>",
+        "currency": "INR",
+        "name": "BoogieBites",
+        "description": "boogiebites payment page",
+        "order_id": document.getElementById('rzp-text').value,
+        "handler": function (response) {
+          payment_id = response.razorpay_payment_id,
+            order_id = response.razorpay_order_id,
+            signature = response.razorpay_signature
+        },
+        "callback_url": "http://localhost:3000/api/payment/verify",
+        // callback_url,
+        "redirect": "true",
+        "notes": {
+          "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+          "color": "#462989"
+        }
+      }
+      var rzp1 = new Razorpay(options);
+      rzp1.open();
+      e.preventDefault();
+    }
+
+
+    if (payment_id) {
+      var url = '/api/payment/verify';
+      var params = {
+        razorpay_order_id: order_id,
+        razorpay_payment_id: payment_id,
+        razorpay_signature: signature
+      }
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function (res) {
+        if (xmlHttp.readyState === 4) {
+          alert(xmlHttp.responseText);
+        }
+      }
+      xmlHttp.open('POST', url, true);
+      xmlHttp.setRequestHeader("Content-type", "application/json");
+      xmlHttp.send(JSON.stringify(params));
+    }
+
+  </script>
+
+  <!-- <div class="order-success hidden">
+    <div class="success">
+      <h2>Order Successfull</h2>
+      <span>Reference No.</span>
+      <span class="ref-id"></span>
+    </div>
+  </div> -->
+
+  <script>
+    const order_button = document.getElementById('order-button1');
+    const container = document.querySelector('.container');
+    const order_container = document.querySelector('.order-container');
+    const checkout_container = document.querySelector('.checkout-container');
+    const amount = document.querySelector('.input-field');
+    const checkout_button = document.getElementById('rzp-button1')
+    const success = document.querySelector('.order-success');
+
+    function moveTocheckout() {
+      if (!amount.value) {
+        return;
+      }
+      else if (isNaN(amount.value)) {
+        alert('Amount must be in Numbers!');
+        return;
+      }
+      order_container.classList.add('hidden');
+      checkout_container.classList.remove('hidden');
+      container.style.transition = 'all .3s ease-in-out';
+    }
+
+    order_button.addEventListener('click', moveTocheckout);
+    checkout_button.addEventListener('click', () => {
+      checkout_container.classList.add('hidden');
+    });
+
+  </script>
+</body>
+
+</html>
