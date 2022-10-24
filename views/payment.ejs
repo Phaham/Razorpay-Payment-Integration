@@ -257,7 +257,7 @@
 
     let callback_url= "https://paymentsuccess.netlify.app/";
     if(!callback_url){
-      callback_url = "http://localhost:3000/api/payment/verify";
+      callback_url = "/api/payment/verify";
     }
     document.getElementById('rzp-button1').onclick = function (e) {
       var options = {
